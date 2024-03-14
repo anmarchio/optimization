@@ -63,7 +63,7 @@ dataset
 
 If you used RegionMarker to label the images, you might want to use ```Optimization.Commandline.exe convert``` to convert it to above format, though the application should be able to handle data from RegionMarker directly.
 
-If you want to run the CLI on deeplearning2, consult the [Wiki](https://gitlab.cc-asp.fraunhofer.de/evias/optimization/-/wikis/Commandline#cli-on-deeplearning2).
+If you want to run the CLI on deeplearning2, consult the [Wiki](Wiki/Commandline#cli-on-deeplearning2).
 
 The location of the resulting images, pipeline.xmls and logging data can be configured using ```--results-dir```. The location defaults to the directory of ```Optimization.Commandline.exe```.
 If you are using the Debug configuration in VisualStudio, this will be ```Optimization.Commandline/bin/Debug/```. The (default) result directory is structured as follows:
@@ -93,7 +93,7 @@ If you are using the Debug configuration in VisualStudio, this will be ```Optimi
 
 ## Further Reference
 
-* [Wiki](https://gitlab.cc-asp.fraunhofer.de/evias/optimization/-/wikis/home)
+* [Wiki](Wiki/home.md)
 * [API] ...
 
 ## Ubuntu
