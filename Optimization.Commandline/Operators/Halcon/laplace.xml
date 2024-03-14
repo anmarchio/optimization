@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Goal of this operator set should be to get the most out of all laplace based operators.
+
+We currently lack a few operators that are suggested to be used in conjunction with it:
+https://www.mvtec.com/doc/halcon/1911/en/laplace.html
+ -->
+<ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <string>Optimization.HPipeline.HalconInputNode, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.AutoThreshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.BandpassImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.BinaryThreshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Closing, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Connection, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Dilation1, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.DualRank, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.EdgesImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.EquHistoImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Erosion1, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.FastThreshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.HighpassImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Laplace, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.LocalThreshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.MeanImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.MedianWeighted, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Opening, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.RegionGrowing, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.SelectShape, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.SmoothImage, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Threshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Union1, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Union2, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.VarThreshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.ZeroCrossing, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+</ArrayOfString>

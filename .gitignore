@@ -1,0 +1,36 @@
+# Don't track content of these folders
+
+# Compiled source #
+###################
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Special Files #
+#################
+.vs/
+packages/
+**/bin/
+**/obj/
+*.diagsession
+*.csproj
+*.csproj.user
+.venv
+.idea
+*.jpg
+*.png
+*.bmp
+*.txt
+*.cd
+.venv
+.idea
+.vscode

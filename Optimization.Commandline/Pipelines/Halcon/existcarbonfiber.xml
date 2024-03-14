@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HalconPipeline xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AdjacencyList>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>0</Head>
+      <Tail>1</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>1</Head>
+      <Tail>2</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>2</Head>
+      <Tail>3</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>3</Head>
+      <Tail>4</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>4</Head>
+      <Tail>5</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>5</Head>
+      <Tail>6</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>6</Head>
+      <Tail>7</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>7</Head>
+      <Tail>8</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>8</Head>
+      <Tail>9</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+    <EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+      <Head>9</Head>
+      <Tail>10</Tail>
+    </EdgeOfHObjectHObjectHalconOperatorNodeHalconInputNodeHalconOperatorNodeObject>
+  </AdjacencyList>
+  <Name>ExistCarbonFiber</Name>
+  <Nodes>
+    <HalconOperatorNode xsi:type="SelectShape">
+      <NodeID>0</NodeID>
+      <Min>70</Min>
+      <Max>99999</Max>
+      <Features>area</Features>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Connection">
+      <NodeID>1</NodeID>
+      <Neighborhood>4</Neighborhood>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Closing">
+      <NodeID>2</NodeID>
+      <A>20</A>
+      <B>5</B>
+      <StructElementType>Rectangle</StructElementType>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Closing">
+      <NodeID>3</NodeID>
+      <A>0.8</A>
+      <B>0</B>
+      <StructElementType>Circle</StructElementType>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Union1">
+      <NodeID>4</NodeID>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="SelectShape">
+      <NodeID>5</NodeID>
+      <Min>6</Min>
+      <Max>99999</Max>
+      <Features>area</Features>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Connection">
+      <NodeID>6</NodeID>
+      <Neighborhood>4</Neighborhood>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Connection">
+      <NodeID>7</NodeID>
+      <Neighborhood>4</Neighborhood>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="Threshold">
+      <NodeID>8</NodeID>
+      <Min>12</Min>
+      <Max>128</Max>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="SobelAmp">
+      <NodeID>9</NodeID>
+      <FilterType>y</FilterType>
+      <MaskSize>3</MaskSize>
+    </HalconOperatorNode>
+    <HalconOperatorNode xsi:type="HalconInputNode">
+      <NodeID>10</NodeID>
+      <ProgramInputIdentifier>-1</ProgramInputIdentifier>
+    </HalconOperatorNode>
+  </Nodes>
+  <Fitness>0</Fitness>
+  <AutoDisposeIntermediateOutputs>false</AutoDisposeIntermediateOutputs>
+</HalconPipeline>

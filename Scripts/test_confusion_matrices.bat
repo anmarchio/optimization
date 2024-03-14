@@ -1,0 +1,2 @@
+"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\amd64\MSBuild.exe" Optimization.Commandline.sln
+FOR /L %%I IN (1, 1, 50) DO packages\NUnit.ConsoleRunner.3.10.0\tools\nunit3-console.exe Optimization.Commandline.Tests/bin/Debug/Optimization.Commandline.Tests.dll --where="name == ConfusionMatrices"

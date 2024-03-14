@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfString xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <string>Optimization.HPipeline.OperatorNodes.SelectShape, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Connection, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Closing, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Union1, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.Threshold, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.OperatorNodes.SobelAmp, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+  <string>Optimization.HPipeline.HalconInputNode, Optimization.HPipeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</string>
+</ArrayOfString>
