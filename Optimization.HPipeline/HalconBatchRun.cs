@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Extensions;
 using HalconDotNet;
 using Newtonsoft.Json;
@@ -15,6 +16,7 @@ using Optimization.Fitness.ErrorHandling;
 using Optimization.HPipeline.Fitness;
 using Optimization.Pipeline;
 using Optimization.Pipeline.Interfaces;
+using Serilog;
 using Collection = Optimization.HPipeline.Fitness.Collection;
 
 namespace Optimization.HPipeline
@@ -44,8 +46,6 @@ namespace Optimization.HPipeline
             LoggingActions.Add(LogAnalyzers);
             LoggingActions.Add(LogTime);
         }
-
-
 
 
         private static void SerializePipelines(LoggingObject obj)
@@ -125,8 +125,26 @@ namespace Optimization.HPipeline
                     pipeline.WriteToDOTFile(Path.Combine(plog, "pipeline.txt"));
             }
         }
-        
 
+        /// <summary>
+        /// stores each single evolved pipeline to analyzer directory
+        /// for analysis purposes;
+        /// should only be executed for research purposes
+        /// </summary>
+        /// <param name="loggable"></param>
+        public static void LogSingleHalconPipeline(LoggingObject loggable)
+        {
+            var ES = loggable.EvolutionStrategy;
+            var best = ES.Best;
+            var batch = loggable.BatchRun as BatchRun;
+            var CGPConfig = batch.Configurations.First(x => x.ConfigurationType == ConfigurationType.CGP) as CGPConfiguration;
+            var plog = Path.Combine(batch.GridDirectory, loggable.Iteration.ToString());
+
+            var pipeline = new HalconPipeline(best.FloatVector, CGPConfig);
+            
+            //!!! NOW THIS IS PRECIOUS !!!
+            pipeline.WriteToDOTFile(Path.Combine(plog, "pipeline" + loggable.Iteration.ToString() + ".txt"));
+        }
 
         public static void LogConfusionMatrix(HalconPipeline pipeline, ReferenceImage image, StreamWriter writer, IEnumerable<FitnessFunction> fitnessFunctions = null)
         {

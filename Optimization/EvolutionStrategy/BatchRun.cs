@@ -14,6 +14,13 @@ using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness.ErrorHandling;
 using Optimization.EvolutionStrategy.Random;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Optimization.Pipeline;
+using Serilog;
+using Optimization.Pipeline.Interfaces;
+using Optimization.EvolutionStrategy.Evaluators;
+using MathNet.Numerics.LinearAlgebra.Solvers;
+using System.Windows.Forms.VisualStyles;
 
 namespace Optimization.EvolutionStrategy
 {
@@ -342,6 +349,7 @@ namespace Optimization.EvolutionStrategy
             var batch = loggable.BatchRun;
             ES.Analyzer.Save(Path.Combine(batch.AnalyzerDirectory, loggable.Iteration.ToString()));
         }
+        
 
         public void LogConfigurations()
         {

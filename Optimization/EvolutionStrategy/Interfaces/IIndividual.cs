@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using Optimization.EvolutionStrategy.Encodings;
 using Optimization.Fitness;
+using Optimization.CartesianGeneticProgramming;
 
 namespace Optimization.EvolutionStrategy.Interfaces
 {

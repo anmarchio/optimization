@@ -4,6 +4,9 @@ using System.Runtime.Serialization;
 using System.Linq;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
+using Optimization.CartesianGeneticProgramming;
+using MathNet.Numerics.LinearAlgebra.Solvers;
+using System.IO;
 
 namespace Optimization.EvolutionStrategy.Encodings
 {

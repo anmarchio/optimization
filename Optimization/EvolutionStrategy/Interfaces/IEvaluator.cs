@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Optimization.CartesianGeneticProgramming;
 using Optimization.Fitness;
 
 namespace Optimization.EvolutionStrategy.Interfaces

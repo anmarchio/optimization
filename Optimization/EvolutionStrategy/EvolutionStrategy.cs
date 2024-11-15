@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using MathNet.Numerics.LinearAlgebra.Solvers;
+using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.EvolutionStrategy.Terminators;
 using Optimization.Fitness;
+using Serilog;
+using static Optimization.EvolutionStrategy.BatchRun;
 
 namespace Optimization.EvolutionStrategy
 {
@@ -166,6 +171,7 @@ namespace Optimization.EvolutionStrategy
             }
         }
 
+
         protected virtual void GenerationStep()
         {
             Best = SelectBest(Population);
@@ -188,13 +194,13 @@ namespace Optimization.EvolutionStrategy
         }
 
 
-        /// <summary>
-        /// Move this to inheriting class
-        /// </summary>
-        protected virtual void GenerationPostProcessing()
+    /// <summary>
+    /// Move this to inheriting class
+    /// </summary>
+    protected virtual void GenerationPostProcessing()
         {
             CGPSelection();
-            if (Analyzer != null) Analyzer.Analyze(this);
+            if (Analyzer != null)  Analyzer.Analyze(this);
             Offspring.Clear();
             CurrentGeneration++;
         }
@@ -212,8 +218,8 @@ namespace Optimization.EvolutionStrategy
             while (!Terminator.Terminate(this))
             {
                 GenerationStep();
-
                 GenerationPostProcessing();
+
                 // optional: let backgroundworker report progress
                 if (Worker != null && Worker.WorkerReportsProgress)
                 {

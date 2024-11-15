@@ -136,6 +136,7 @@ namespace Optimization.Pipeline
             }
 
         }
+        
         public string Name { get; set; } = "DefaultName";
 
 

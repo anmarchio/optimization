@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Extensions;
+using Newtonsoft.Json;
+using Optimization.CartesianGeneticProgramming;
+using Optimization.EvolutionStrategy.Encodings;
+using Optimization.EvolutionStrategy.Interfaces;
+using Optimization.Pipeline;
+using Optimization.Pipeline.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using Extensions;
-using Newtonsoft.Json;
-using Optimization.EvolutionStrategy.Interfaces;
-using Optimization.EvolutionStrategy.Terminators;
 
 namespace Optimization.EvolutionStrategy.Analyzers
 {
@@ -20,13 +22,18 @@ namespace Optimization.EvolutionStrategy.Analyzers
         public Dictionary<int, double> AveragePopulationFitnessValue;
         public Dictionary<int, double> AverageOffspringFitnessValue;
         public Dictionary<int, double> BestIndividualFitnessValue;
+        public Dictionary<int, FloatVector> BestIndividualDotPipeline;
+        public CGPConfiguration cgpConfig;
 
-     
         public FitnessValueAnalyzer()
         {
             AverageOffspringFitnessValue = new Dictionary<int, double>();
             AveragePopulationFitnessValue = new Dictionary<int, double>();
             BestIndividualFitnessValue = new Dictionary<int, double>();
+            BestIndividualDotPipeline = new Dictionary<int, FloatVector>();
+
+            // Temporary to simplify logging
+            CGPConfiguration cgpConfig = new CGPConfiguration();
         }
 
         public override void Analyze(EvolutionStrategy evolutionStrategy)
@@ -48,6 +55,7 @@ namespace Optimization.EvolutionStrategy.Analyzers
             AveragePopulationFitnessValue.Add(generation, population.Sum(x => fitConfig.WeightedFitnessOf(x)) / population.Count);
             AverageOffspringFitnessValue.Add(generation, offspring.Sum(x => fitConfig.WeightedFitnessOf(x)) / offspring.Count);
             BestIndividualFitnessValue.Add(generation, fitConfig.WeightedFitnessOf(evolutionStrategy.Best));
+            BestIndividualDotPipeline.Add(generation, evolutionStrategy.Best as FloatVector);
         }
 
         public override void Save(string directory)
@@ -63,6 +71,10 @@ namespace Optimization.EvolutionStrategy.Analyzers
             using (var writer = new StreamWriter(Path.Combine(directory, "BestIndividualFit.txt"), false))
             {
                 WriteDictionary(BestIndividualFitnessValue, writer, "BestIndividual");
+            }
+            using (var writer = new StreamWriter(Path.Combine(directory, "BestDotPipeline.txt"), false))
+            {
+                WriteDictionary(BestIndividualDotPipeline, cgpConfig, writer, "BestPipeline");
             }
 
             SaveJson(directory);
@@ -96,9 +108,29 @@ namespace Optimization.EvolutionStrategy.Analyzers
             }
         }
 
+        
+        public static void WriteDictionary(Dictionary<int, FloatVector> dictionary, CGPConfiguration cgpConfig, 
+            StreamWriter writer, string header)
+        {
+            writer.WriteLine("Generation," + header);
+            foreach (var key in dictionary.Keys)
+            {
+                FloatVector vector = dictionary[key] as FloatVector;
+
+                Pipeline.Pipeline<TInput, TOutput, TNode, TInputNode, TOutputNode, TWeight> pipeline = 
+                    new Pipeline<TInput, TOutput, TNode, TInputNode, TOutputNode, TWeight>(vector, cgpConfig);
+                
+
+                string dotString = pipeline.ToDOTString();
+
+                writer.WriteLine("===" + key.ToString() + "===\n" + dotString + "\n");
+            }
+        }
+
         public override ICopyable Copy()
         {
             return new FitnessValueAnalyzer();
         }
+                
     }
 }

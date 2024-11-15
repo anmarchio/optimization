@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using HalconDotNet;
 using Optimization.CartesianGeneticProgramming;
@@ -368,6 +369,7 @@ namespace Optimization.HPipeline.Fitness
             //GC.WaitForPendingFinalizers();
             return results;
         }
+
 
         /// <summary>
         /// Calculates a penalty factor to reduce fitness for increasing execution time needed. Values returned: [0.00000001, 1].
@@ -1577,6 +1579,5 @@ namespace Optimization.HPipeline.Fitness
         {
             return new FitnessEvaluator((HalconFitnessConfiguration) FitnessConfiguration, CGPConfiguration, Decoder, Builder);
         }
-
     }
 }

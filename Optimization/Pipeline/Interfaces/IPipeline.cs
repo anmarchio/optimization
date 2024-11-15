@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Dynamic;
 using System.Windows.Forms;
+using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Serialization.Interfaces;
 
@@ -7,7 +9,6 @@ namespace Optimization.Pipeline.Interfaces
 {
     public interface IPipeline : IIndividual, ISupportsSerialization
     {
-
         void ResetOutput();
 
         bool AllNodesAreUniquelyIdentified();
