@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.CartesianGeneticProgramming.Interfaces;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.Fitness.OperatorMaps
 { 

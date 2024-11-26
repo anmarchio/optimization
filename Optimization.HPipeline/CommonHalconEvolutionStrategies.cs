@@ -38,7 +38,8 @@ namespace Optimization.HPipeline
         public static BatchRun BuildStandardCGPEvolutionStrategy(CGPConfiguration CGPconfig, ReferenceSet refSet, ReferenceSet valSet,
             int generations, string saveDirectory, int iterations, int seed = 0, int parallelDegree = 1, BackgroundWorker worker = null,
             FitnessFunction fitnessFunction = FitnessFunction.MCC,
-            int? batchSize=null, int? queueSize = null, int? executionTimeThreshold = 1000, FitnessFunction[] fitnessFunctions = null, double[] weights = null)
+            int? batchSize=null, int? queueSize = null, int? executionTimeThreshold = 1000, FitnessFunction[] fitnessFunctions = null, double[] weights = null,
+            int logGenBestIndividuals = 0)
         {
             var random = new SystemRandom(seed);
             var decoder = new CGPDecoder(CGPconfig);
@@ -46,7 +47,11 @@ namespace Optimization.HPipeline
             var mutator = new SinglePassMutator(random, CGPconfig);
             var procrSelector = new RandomSelector(random);
             var terminator = new GenerationCountTerminator(generations);
-            var ESconfig = new ESConfiguration(1, 4, 0, true);
+
+            bool logGenBestIndividualsBool = false;
+            if (logGenBestIndividuals > 0)
+                logGenBestIndividualsBool = true;
+            var ESconfig = new ESConfiguration(1, 4, 0, true, logGenBestIndividualsBool);
             
             if (fitnessFunctions == null || !fitnessFunctions.Any())
             {

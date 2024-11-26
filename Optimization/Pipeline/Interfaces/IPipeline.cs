@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
 using System.Windows.Forms;
 using Optimization.CartesianGeneticProgramming;
+using Optimization.EvolutionStrategy.Encodings;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Serialization.Interfaces;
 
-namespace Optimization.Pipeline.Interfaces
+namespace Optimization.HalconPipeline.Interfaces
 {
     public interface IPipeline : IIndividual, ISupportsSerialization
     {

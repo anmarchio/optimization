@@ -8,7 +8,8 @@ using HalconDotNet;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Encodings;
 using Optimization.EvolutionStrategy.Interfaces;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.HPipeline
 {
@@ -27,7 +28,7 @@ namespace Optimization.HPipeline
         public HalconPipeline(FloatVector vector, CGPConfiguration configuration) : base(vector, configuration)
         {
         }
-
+        
         /// <summary>
         /// author: leen
         /// Invokes a shallow copy of a pipeline;

@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.IO;
-using System.Threading;
-using Extensions;
+﻿using Extensions;
+using MathNet.Numerics.LinearAlgebra.Solvers;
 using Newtonsoft.Json;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Interfaces;
-using Optimization.Fitness.ErrorHandling;
 using Optimization.EvolutionStrategy.Random;
+using Optimization.HalconPipeline.Interfaces;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using Optimization.Pipeline;
-using Serilog;
-using Optimization.Pipeline.Interfaces;
-using Optimization.EvolutionStrategy.Evaluators;
-using MathNet.Numerics.LinearAlgebra.Solvers;
-using System.Windows.Forms.VisualStyles;
+using System.Threading;
 
 namespace Optimization.EvolutionStrategy
 {
@@ -95,8 +87,18 @@ namespace Optimization.EvolutionStrategy
 
         /// <summary>
         /// Producer-Consumer properties
+        /// Tuple<(int) Run, (int) Generation, (IIndividual) BestIndividual>
         /// </summary>
         public ConcurrentQueue<Tuple<int, IIndividual>> BestIndividuals { get; protected set; }
+
+
+        /// <summary>
+        /// Stores BestIndividual per Generation for logging and analysis
+        /// WARNING: Do not use for more than 1 batchrun => danger of memory overflow!
+        /// List<Tuple<(int) Run, (int) Generation, (IIndividual) BestIndividual>
+        /// </summary>
+        public List<Tuple<int, List<IIndividual>>> GenBestIndividuals { get; protected set; }
+
         /// <summary>
         /// Seed, Evolutionstrategy, "Index"
         /// </summary>
@@ -163,6 +165,11 @@ namespace Optimization.EvolutionStrategy
             this.SeedList = produceSeeds(seed);
 
             this.BestIndividuals = new ConcurrentQueue<Tuple<int, IIndividual>>();
+
+            
+            if (evolutionStrategy.Configuration.LogGenBestIndividuals)
+                this.GenBestIndividuals = new List<Tuple<int, List<IIndividual>>>();
+
             this.evolutionStrategies = new BlockingCollection<Tuple<int, IEvolutionStrategy, int>>(collectionCount);
         }
 
@@ -176,6 +183,7 @@ namespace Optimization.EvolutionStrategy
         {
             //Einfuegen einer korrekten Abbruchbedingung (return) wenn Lsite leer und Complete Adding gestetz bzw cancellationPending auf false ist
             IIndividual best = null;
+            List<IIndividual> bestCollectionPerGen = null;
 
             var run = (BatchRun)sender;
 
@@ -191,8 +199,13 @@ namespace Optimization.EvolutionStrategy
                 try
                 {
                     Console.WriteLine("Evolving");
-                    best = evolutionstrategytemp.Evolve();
+                    bestCollectionPerGen = evolutionstrategytemp.Evolve();
+                    best = bestCollectionPerGen.Last();
                     run.BestIndividuals.Enqueue(Tuple.Create(seed, best));
+
+                    if (evolutionstrategytemp.Configuration.LogGenBestIndividuals)
+                        run.GenBestIndividuals.Add(Tuple.Create(seed, bestCollectionPerGen));
+                    
 
                     run.Log(new LoggingObject { BatchRun = run,
                         EvolutionStrategy = evolutionstrategytemp
@@ -322,13 +335,21 @@ namespace Optimization.EvolutionStrategy
             var indexedIndividuals = Enumerable.Range(0, BestIndividuals.Count)
                 .ToDictionary(x => x, x => BestIndividuals.ElementAt(x).Item2);
 
+
             using (var writer = new StreamWriter(Path.Combine(SaveDirectory, "overview.txt")))
                 for (int i = 0; i < BestIndividuals.ToList().Count; i++)
                 {
-                    writer.WriteLine("Iteration: " + i + " Best Fitness: " + 
+                    writer.WriteLine("Iteration: " + i + " Best Fitness: " +
                                      EvolutionStrategy.FitnessConfiguration.WeightedFitnessOf(indexedIndividuals[i]));
                 }
 
+            /*
+            using (var writer = new StreamWriter(Path.Combine(SaveDirectory, myVectorFile...)))
+                for (int i = 0; i < BestIndividuals.ToList().Count; i++)
+                {
+                    !!! writer Best Individual Vector to file !!!
+                }
+            */
             using (var writer = new StreamWriter(Path.Combine(SaveDirectory, "overview.json")))
             {
                 writer.WriteLine(BestIndividualsToJson(indexedIndividuals));
@@ -349,7 +370,6 @@ namespace Optimization.EvolutionStrategy
             var batch = loggable.BatchRun;
             ES.Analyzer.Save(Path.Combine(batch.AnalyzerDirectory, loggable.Iteration.ToString()));
         }
-        
 
         public void LogConfigurations()
         {

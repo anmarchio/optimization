@@ -1,4 +1,4 @@
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     public class CGPPipelineException : Exception
     {

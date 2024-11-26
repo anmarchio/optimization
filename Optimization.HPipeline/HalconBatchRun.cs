@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Extensions;
 using HalconDotNet;
 using Newtonsoft.Json;
@@ -14,9 +13,8 @@ using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
 using Optimization.Fitness.ErrorHandling;
 using Optimization.HPipeline.Fitness;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
-using Serilog;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 using Collection = Optimization.HPipeline.Fitness.Collection;
 
 namespace Optimization.HPipeline
@@ -42,6 +40,7 @@ namespace Optimization.HPipeline
                     Directory.CreateDirectory(p);
             }
 
+            LoggingActions.Add(LogHalconBestPipelinesByIteration);
             LoggingActions.Add(LogHalconPipelineEvolution);
             LoggingActions.Add(LogAnalyzers);
             LoggingActions.Add(LogTime);
@@ -68,7 +67,7 @@ namespace Optimization.HPipeline
 
         /// <summary>
         /// loggable object exposes the batch runs EvolutionStrategy as loggable.EvolutionStrategy
-        /// and the current iteration als loggable.Iteration
+        /// and the current iteration as loggable.Iteration
         /// </summary>
         /// <param name="loggable"></param>
         public static void LogHalconPipelineEvolution(LoggingObject loggable)
@@ -82,10 +81,9 @@ namespace Optimization.HPipeline
 
             var plog = Path.Combine(batch.GridDirectory, loggable.Iteration.ToString());
 
-            
             Logger.PrintGrid(best.FloatVector, CGPConfig, plog, false, null, true, false);
             Logger.PrintVector(best.FloatVector, CGPConfig, plog);
-
+            //Logger.PrintIterationVector(best.FloatVector, CGPConfig, plog, generationNumber);
 
             var opEncoder = CGPConfig.OperatorMap as IOperatorEncoder;
             if (opEncoder != null)
@@ -93,57 +91,117 @@ namespace Optimization.HPipeline
                 var pipeline = new HalconPipeline(best.FloatVector, CGPConfig);
                 var dict = new Dictionary<string, Dictionary<string, object>>();
 
-                    using (var writer = new StreamWriter(Path.Combine(batch.ImagesDirectory,
-                        loggable.Iteration.ToString(), "ConfusionMatrix.txt"), append: true))
+                using (var writer = new StreamWriter(Path.Combine(batch.ImagesDirectory,
+                    loggable.Iteration.ToString(), "ConfusionMatrix.txt"), append: true))
+                {
+                    for (int i = 0; i < refSet.Count; i++)
                     {
-                        for (int i = 0; i < refSet.Count; i++)
+                        using (var image = refSet[i])
                         {
-                            using (var image = refSet[i])
+                            LogConfusionMatrix(pipeline, image, writer);
+                            dict.Add(Path.GetFileName(image.Filename), ConfusionMatrixToDictionary(pipeline, image, FitConfig.FitnessFunctions));
+                            using (var output = pipeline.ExecuteSingle(image.Image))
                             {
-                                LogConfusionMatrix(pipeline, image, writer);
-                                dict.Add(Path.GetFileName(image.Filename), ConfusionMatrixToDictionary(pipeline, image, FitConfig.FitnessFunctions));
-                                using (var output = pipeline.ExecuteSingle(image.Image))
+                                using (var hImage = new HImage(image.Image))
                                 {
-                                    using (var hImage = new HImage(image.Image))
-                                    {
-                                        hImage.Dump(
-                                            Path.Combine(batch.ImagesDirectory, loggable.Iteration.ToString(),
-                                                Path.GetFileName(image.Filename)),
-                                            reference: image.ReferenceRegions, actual: output);
-                                    }
+                                    hImage.Dump(
+                                        Path.Combine(batch.ImagesDirectory, loggable.Iteration.ToString(),
+                                            Path.GetFileName(image.Filename)),
+                                        reference: image.ReferenceRegions, actual: output);
                                 }
                             }
                         }
                     }
-                    // write ConfusionMatrix.json for all images in the images directory of each batch run iteration
-                    using (var writer = new StreamWriter(Path.Combine(batch.GridDirectory, batch.ImagesDirectory,
-                        loggable.Iteration.ToString(), "ConfusionMatrix.json")))
-                    {
-                        writer.WriteLine(JsonConvert.SerializeObject(dict, Formatting.Indented));
-                    }
+                }
+                // write ConfusionMatrix.json for all images in the images directory of each batch run iteration
+                using (var writer = new StreamWriter(Path.Combine(batch.GridDirectory, batch.ImagesDirectory,
+                    loggable.Iteration.ToString(), "ConfusionMatrix.json")))
+                {
+                    writer.WriteLine(JsonConvert.SerializeObject(dict, Formatting.Indented));
+                }
 
+                try
+                {
                     pipeline.WriteToDOTFile(Path.Combine(plog, "pipeline.txt"));
+
+                }
+                catch (OperatorException ex)
+                {
+                    Console.WriteLine(ex.Message, ex.StackTrace);
+                    Serilog.Log.Logger.Error(ex, "{Exception}");
+                }
             }
         }
 
-        /// <summary>
-        /// stores each single evolved pipeline to analyzer directory
-        /// for analysis purposes;
-        /// should only be executed for research purposes
-        /// </summary>
-        /// <param name="loggable"></param>
-        public static void LogSingleHalconPipeline(LoggingObject loggable)
+        // ==================>
+        // ========> TEST THIS
+        // ==================>
+        public static void LogHalconBestPipelinesByIteration(LoggingObject loggable)
         {
+            Console.WriteLine("LogHalconBestPipelinesByIteration ...");
             var ES = loggable.EvolutionStrategy;
-            var best = ES.Best;
-            var batch = loggable.BatchRun as BatchRun;
-            var CGPConfig = batch.Configurations.First(x => x.ConfigurationType == ConfigurationType.CGP) as CGPConfiguration;
-            var plog = Path.Combine(batch.GridDirectory, loggable.Iteration.ToString());
+            if(ES.Configuration.LogGenBestIndividuals)
+            { 
+                // Convert ConcurrentQueue to an array for easier iteration.
+                var batchRunsIndividuals = Enumerable.Range(0, loggable.BatchRun.GenBestIndividuals.Count)
+                    .ToDictionary(x => x, x => loggable.BatchRun.GenBestIndividuals.ElementAt(x).Item2);
 
-            var pipeline = new HalconPipeline(best.FloatVector, CGPConfig);
-            
-            //!!! NOW THIS IS PRECIOUS !!!
-            pipeline.WriteToDOTFile(Path.Combine(plog, "pipeline" + loggable.Iteration.ToString() + ".txt"));
+                var batch = loggable.BatchRun as BatchRun;
+                var CGPConfig = batch.Configurations.First(x => x.ConfigurationType == ConfigurationType.CGP) as CGPConfiguration;
+                var FitConfig = batch.Configurations.First(x => x.ConfigurationType == ConfigurationType.Fitness) as HalconFitnessConfiguration;
+                var refSet = FitConfig.ValidationSet ?? FitConfig.ReferenceSet;
+
+                Console.WriteLine($"Writing individuals: {batchRunsIndividuals.Count()} ...");
+
+                for (int i = 0; i < batchRunsIndividuals.Count(); i++)
+                {
+                    // Access the individual elements of the current item.                      
+                    var listOfBest = batchRunsIndividuals[i]; // Tuple<int, List<IIndividual>>
+                    try
+                    {
+                        for (int j = 0; j < listOfBest.Count(); j++)
+                        {
+                            if (CGPConfig == null)
+                            {
+                                Console.WriteLine($"ERROR: CGP Configuration not found for Gen {j} in Batchrun {i}!");
+                                continue;
+                            }
+
+                            var plog = Path.Combine(batch.GridDirectory, loggable.Iteration.ToString());
+
+                            // Create the pipeline if OperatorEncoder is present
+                            var opEncoder = CGPConfig.OperatorMap as IOperatorEncoder;
+                            if (opEncoder != null)
+                            {
+                                var pipeline = new HalconPipeline(listOfBest[j].FloatVector, CGPConfig);
+
+                                var filename = Path.Combine(plog, "pipelines",
+                                    $"pipeline_{j + 1}_of_{listOfBest.Count()}_in_Run_{i}.txt");
+
+                                // Ensure the directory exists
+                                Directory.CreateDirectory(Path.GetDirectoryName(filename) ?? string.Empty);
+
+                                Console.WriteLine($"Run {i}, Gen{j}: Writing dot pipeline for Gen {j} Run {loggable.Iteration.ToString()} to {filename}");
+                                pipeline.WriteToDOTFile(filename);
+                            }
+                        }
+                    }
+                    catch (OperatorException ex)
+                    {
+                        // Log and handle exceptions related to operators
+                        Console.WriteLine($"OperatorException: {ex.Message}");
+                        Console.WriteLine(ex.StackTrace);
+                        Serilog.Log.Logger.Error(ex, "Error while processing generation");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log and handle any generic exceptions
+                        Console.WriteLine($"Exception: {ex.Message}");
+                        Console.WriteLine(ex.StackTrace);
+                        Serilog.Log.Logger.Error(ex, "Unexpected error occurred");
+                    }
+                }
+            }
         }
 
         public static void LogConfusionMatrix(HalconPipeline pipeline, ReferenceImage image, StreamWriter writer, IEnumerable<FitnessFunction> fitnessFunctions = null)
@@ -224,6 +282,7 @@ namespace Optimization.HPipeline
         {
             return new List<Action<LoggingObject>>()
             {
+                LogHalconBestPipelinesByIteration,
                 LogHalconPipelineEvolution,
                 LogAnalyzers,
                 LogTime,

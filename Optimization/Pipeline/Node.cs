@@ -5,9 +5,9 @@ using System.Reflection;
 using System.Xml.Serialization;
 using Extensions;
 using Optimization.EvolutionStrategy.Interfaces;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     #region XmlInclude Attributes required to write Xml, for halcon and cv nodes see respective subclasses
     #endregion

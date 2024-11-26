@@ -2,7 +2,7 @@
 using Optimization.EvolutionStrategy.Encodings;
 using Optimization.EvolutionStrategy.Interfaces;
 
-namespace Optimization.Pipeline.Interfaces
+namespace Optimization.HalconPipeline.Interfaces
 {
     public interface IFloatVectorConvertible
     {

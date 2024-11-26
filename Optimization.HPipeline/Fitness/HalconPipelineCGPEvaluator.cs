@@ -6,7 +6,7 @@ using Optimization.CartesianGeneticProgramming;
 using Optimization.Data;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.Fitness
 {

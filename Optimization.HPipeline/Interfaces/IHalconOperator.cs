@@ -1,5 +1,5 @@
 ﻿using HalconDotNet;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.HPipeline.Interfaces
 {

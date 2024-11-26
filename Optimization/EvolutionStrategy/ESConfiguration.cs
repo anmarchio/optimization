@@ -13,6 +13,18 @@ namespace Optimization.EvolutionStrategy
             Mu = 1;
             Lambda = 4;
             PlusSelection = true;
+            LogGenBestIndividuals = false;
+        }
+
+        public ESConfiguration(int mu, int lambda, int rho, bool plus, bool logGenBestIndividuals)
+        {
+            if (mu > lambda) throw new Exception("Population size(mu) must not be larger than offspring (lambda)");
+            if (mu == 0 || lambda == 0) throw new Exception(string.Format("Lambda {0} or Mu {1} are zero, i.e. there will be no population or no offspring.", mu, lambda));
+            Rho = rho;
+            Lambda = lambda;
+            PlusSelection = plus;
+            Mu = mu;
+            LogGenBestIndividuals = logGenBestIndividuals;
         }
 
         public ESConfiguration(int mu, int lambda, int rho, bool plus)
@@ -49,10 +61,15 @@ namespace Optimization.EvolutionStrategy
         {
             get; set;
         }
-        
+
+        public bool LogGenBestIndividuals
+        {
+            get; set;
+        }
+
         public int Mu { get; set; }
 
-      
+        
         public ConfigurationType ConfigurationType
         {
             get

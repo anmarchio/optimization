@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.CVPipeline.OperatorNodes
 {

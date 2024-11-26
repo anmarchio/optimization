@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.Fitness.OperatorMaps;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.CVPipeline.CVCGP
 {

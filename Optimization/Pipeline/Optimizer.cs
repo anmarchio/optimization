@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Optimization.EvolutionStrategy.Interfaces;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     /// <summary>
     /// 

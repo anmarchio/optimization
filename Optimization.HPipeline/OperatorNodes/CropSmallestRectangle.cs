@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HalconDotNet;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.OperatorNodes
 {

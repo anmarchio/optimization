@@ -4,8 +4,8 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Encodings;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.CVPipeline
 {

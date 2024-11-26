@@ -5,8 +5,8 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Optimization.CVPipeline.OperatorNodes;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 //using PRIME.Optimization.HPipeline;
 
 namespace Optimization.CVPipeline

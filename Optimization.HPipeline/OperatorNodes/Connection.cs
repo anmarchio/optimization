@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HalconDotNet;
 using Optimization.HPipeline.Fitness.OperatorMaps;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.OperatorNodes
 {

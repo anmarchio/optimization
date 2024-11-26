@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     [Serializable]
     public class DependencyTree : Pipeline<object, object, DependencyNode, DependencyNode, DependencyNode, object>

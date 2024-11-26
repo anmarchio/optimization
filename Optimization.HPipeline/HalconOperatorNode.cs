@@ -5,8 +5,8 @@ using System.Xml.Serialization;
 using HalconDotNet;
 using Optimization.HPipeline.Interfaces;
 using Optimization.HPipeline.OperatorNodes;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.HPipeline
 {

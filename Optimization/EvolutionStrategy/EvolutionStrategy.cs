@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra.Solvers;
-using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.EvolutionStrategy.Terminators;
 using Optimization.Fitness;
-using Serilog;
-using static Optimization.EvolutionStrategy.BatchRun;
 
 namespace Optimization.EvolutionStrategy
 {
@@ -105,6 +100,8 @@ namespace Optimization.EvolutionStrategy
 
         public List<IIndividual> Offspring { get; protected set; }
 
+        public List<IIndividual> BestCollectionPerGen { get; protected set; }
+
         public void RegisterWorker(BackgroundWorker worker, int percentageOffsetMin, int percentageOffsetMax)
         {
             Worker = worker;
@@ -119,6 +116,7 @@ namespace Optimization.EvolutionStrategy
         {
             Offspring = new List<IIndividual>();
             Population = new List<IIndividual>();
+            BestCollectionPerGen = new List<IIndividual>();
             CurrentGeneration = 0;
 
             while (Population.Count < Configuration.Mu)
@@ -171,10 +169,10 @@ namespace Optimization.EvolutionStrategy
             }
         }
 
-
-        protected virtual void GenerationStep()
+        protected virtual IIndividual GenerationStep()
         {
             Best = SelectBest(Population);
+            BestCollectionPerGen.Add(Best);
 
             List<IIndividual> parents = null;
             if (Configuration.Rho > 0) // crossover
@@ -191,44 +189,47 @@ namespace Optimization.EvolutionStrategy
                 SelectSurvivors(Offspring.Union(Population).ToList());
             else
                 SelectSurvivors(Offspring);
+
+            return Best;
         }
 
 
-    /// <summary>
-    /// Move this to inheriting class
-    /// </summary>
-    protected virtual void GenerationPostProcessing()
+        /// <summary>
+        /// Move this to inheriting class
+        /// </summary>
+        protected virtual void GenerationPostProcessing()
         {
             CGPSelection();
-            if (Analyzer != null)  Analyzer.Analyze(this);
+            if (Analyzer != null) Analyzer.Analyze(this);
             Offspring.Clear();
             CurrentGeneration++;
         }
 
-        public virtual IIndividual Evolve()
+        public virtual List<IIndividual> Evolve()
         {
             Initialize();
 
             Evaluate(Population);
-
+            
             Best = SelectBest(Population);
+            BestCollectionPerGen.Add(Best);
 
             if (Analyzer != null) Analyzer.Analyze(this);
 
             while (!Terminator.Terminate(this))
             {
                 GenerationStep();
-                GenerationPostProcessing();
 
+                GenerationPostProcessing();
                 // optional: let backgroundworker report progress
                 if (Worker != null && Worker.WorkerReportsProgress)
                 {
                     ReportProgress();
                     if(Worker.CancellationPending)
-                        return Best;
+                        return BestCollectionPerGen;
                 }
             }
-            return Best;
+            return BestCollectionPerGen;
         }
 
         protected IIndividual SelectBest(IEnumerable<IIndividual> individuals)

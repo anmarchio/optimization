@@ -1,4 +1,4 @@
-﻿using Optimization.Pipeline.Interfaces;
+﻿using Optimization.HalconPipeline.Interfaces;
 using System.Collections.Generic;
 
 namespace Optimization.HPipeline.Interfaces

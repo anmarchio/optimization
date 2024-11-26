@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Optimization.Pipeline.Interfaces
+namespace Optimization.HalconPipeline.Interfaces
 {
     public interface IParameterInformant : INode
     {

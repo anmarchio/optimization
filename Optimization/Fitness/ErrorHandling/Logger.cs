@@ -75,7 +75,24 @@ namespace Optimization.Fitness.ErrorHandling
                 return Path.Combine(BasePath, "ExceptionGrids.txt");
             }
         }
-        
+
+
+        public static void PrintIterationVector(FloatVector vector, CGPConfiguration parameters, string directory, int iteration)
+        {
+            // print vector for later use
+            using (var writer = new StreamWriter(Path.Combine(directory, "vector " + iteration + ".txt")))
+            {
+                for (int i = 0; i < vector.Length - 1; i++)
+                {
+                    writer.Write(vector[i].ToInvariantString() + ",");
+                }
+                writer.Write(vector[vector.Length - 1].ToInvariantString());
+                writer.WriteLine();
+            }
+
+            // maybe write parameters for convenience;       
+        }
+
         public static void PrintVector(FloatVector vector, CGPConfiguration parameters, string directory)
         {
             // print vector for later use

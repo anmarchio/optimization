@@ -7,9 +7,9 @@ using Optimization.EvolutionStrategy.Encodings;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.EvolutionStrategy.Random;
 using Optimization.Fitness;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     [Serializable]
     public class CGPPipeline<TInput, TOutput, TNode, TInputNode, TOutputNode, TWeight > : Pipeline<TInput, TOutput, TNode, TInputNode, TOutputNode, TWeight>, IPipeline<TNode, TInput, TOutput>, IFloatVectorConvertible where TNode : CGPNode<TOutput>, IParameterInformant, IOutputDisposable where TInputNode : IOutputNode<TInput>, TNode where TOutputNode : TNode, IOutputNode<TOutput>

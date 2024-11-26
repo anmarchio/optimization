@@ -5,7 +5,7 @@ using HalconDotNet;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.Fitness.Interfaces;
 using Optimization.Fitness.OperatorMaps;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.HPipeline.Fitness.OperatorMaps
 {

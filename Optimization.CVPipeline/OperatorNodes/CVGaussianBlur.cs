@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Emgu.CV;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.CVPipeline.OperatorNodes
 

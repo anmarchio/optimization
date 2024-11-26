@@ -9,10 +9,10 @@ using Optimization.CartesianGeneticProgramming;
 using Optimization.EvolutionStrategy.Encodings;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 using Optimization.Serialization.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
 
     [Serializable]
@@ -136,7 +136,6 @@ namespace Optimization.Pipeline
             }
 
         }
-        
         public string Name { get; set; } = "DefaultName";
 
 

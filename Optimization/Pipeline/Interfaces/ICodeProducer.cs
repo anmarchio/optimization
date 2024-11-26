@@ -1,4 +1,4 @@
-﻿namespace Optimization.Pipeline.Interfaces
+﻿namespace Optimization.HalconPipeline.Interfaces
 {
     public interface ICodeProducer
     {

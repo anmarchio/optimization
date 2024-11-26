@@ -10,10 +10,10 @@ using Optimization.EvolutionStrategy.Evaluators;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
 using Optimization.Fitness.Interfaces;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 using Serilog;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     public class PipelineEvaluator<TInputData, TOutput, TPipeline, TNode, TPipeInput, TPipeOutput> : Evaluator<TInputData> where TInputData : IReference<TPipeInput, TPipeOutput>, IDisposable where TPipeline : IPipeline<TNode, TPipeInput, TPipeOutput> where TNode : Node
     {

@@ -6,8 +6,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Extensions;
 using Optimization.CartesianGeneticProgramming;
 using Optimization.CartesianGeneticProgramming.Interfaces;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.Fitness.OperatorMaps
 {

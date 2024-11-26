@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using HalconDotNet;
 using Optimization.HPipeline.Fitness.OperatorMaps;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.OperatorNodes
 {

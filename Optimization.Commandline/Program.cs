@@ -23,8 +23,8 @@ using Optimization.HPipeline;
 using Optimization.HPipeline.Fitness;
 using Optimization.HPipeline.Fitness.OperatorMaps;
 using Optimization.HPipeline.Serialization;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 using Serilog;
 using Serilog.Core;
 
@@ -161,6 +161,9 @@ namespace Optimization.Commandline
                 HelpText = "The total number of program outputs (i.e. pipeline inputs).")]
             public int CgpProgramOutputCount { get; set; }
 
+            [Option(longName: "cgp-log-best-individuals", Hidden = true, Required = false, Default = 0,
+                HelpText = "Log the best individuals per generation.")]
+            public int LogGenBestIndividuals { get; set; }
             #endregion
 
             #region config-file options
@@ -379,7 +382,7 @@ namespace Optimization.Commandline
                         FitsIntoMemory = o.FitsMemory
                     };
 
-                    var pipeline = HalconPipeline.DeserializeXml(o.PipelinePath);
+                    var pipeline = HPipeline.HalconPipeline.DeserializeXml(o.PipelinePath);
                     if (pipeline.Nodes.Select(x => x.NodeID).Distinct().Count() != pipeline.Nodes.Count)
                         throw new ArgumentException("All nodes must be uniquely identified (NodeID).");
 
@@ -387,7 +390,7 @@ namespace Optimization.Commandline
                         new DataLoader<ReferenceImage>(data),
                         new HalconFitnessConfiguration(o.FitnessFunctions.ToArray(), o.Weights.ToArray()));
 
-                    var optimizer = new Optimizer<HalconPipeline, HalconOperatorNode>(pipeline, evaluator,
+                    var optimizer = new Optimizer<HPipeline.HalconPipeline, HalconOperatorNode>(pipeline, evaluator,
                         pipeline.Nodes.Where(x => o.NodeIds.Select(y => (float)y).Contains(x.NodeID)).ToList());
                     Console.WriteLine($"optimizing: {optimizer.NecessaryEvaluations} combinations. May take an infeasible amount of time.");
                     Console.WriteLine($"best fitness: {optimizer.Optimize()}");
@@ -486,7 +489,7 @@ namespace Optimization.Commandline
                         statusQuo = CVPipeline.CVPipeline.DeserializeXml(o.StatusQuoXml);
                         break;
                     case Backend.halcon:
-                        statusQuo = HalconPipeline.DeserializeXml(o.StatusQuoXml);
+                        statusQuo = HPipeline.HalconPipeline.DeserializeXml(o.StatusQuoXml);
                         break;
                 }
             }
@@ -663,7 +666,7 @@ namespace Optimization.Commandline
             switch (o.Backend)
             {
                 case Backend.halcon:
-                    var pipe = HalconPipeline.DeserializeXml(o.PipelinePath);
+                    var pipe = HPipeline.HalconPipeline.DeserializeXml(o.PipelinePath);
                     HTuple actualColor = null, referenceColor = null, intersectionColor = null;
 
                     ParseColorsHalcon(o, out actualColor, out referenceColor, out intersectionColor);
@@ -836,7 +839,7 @@ namespace Optimization.Commandline
                 switch (o.Backend)
                 {
                     case Backend.halcon:
-                        ((HalconPipeline)statusQuo).ToCGPEncoding(map, tmpRnd,
+                        ((HPipeline.HalconPipeline)statusQuo).ToCGPEncoding(map, tmpRnd,
                             out vec, out cgpConfig);
                         break;
                     case Backend.emgucv:
@@ -892,7 +895,8 @@ namespace Optimization.Commandline
                                 fitnessFunction: o.FitnessFunction,
                                 fitnessFunctions: o.FitnessFunctions.ToArray(),
                                 weights: o.Weights.ToArray(),
-                                parallelDegree: (int) o.WorkerCount);
+                                parallelDegree: (int) o.WorkerCount,
+                                logGenBestIndividuals: o.LogGenBestIndividuals);
                                 
                             break;
                         case EvolutionStrategyType.selfadaptive:
@@ -989,7 +993,7 @@ namespace Optimization.Commandline
                 switch (o.Backend)
                 {
                     case Backend.halcon:
-                        var hpipe = (HalconPipeline)statusQuo;
+                        var hpipe = (HPipeline.HalconPipeline)statusQuo;
                         tree = hpipe.ToDependencyTree();
                         nodes = hpipe.Nodes.Cast<INode>().ToList();
                         break;

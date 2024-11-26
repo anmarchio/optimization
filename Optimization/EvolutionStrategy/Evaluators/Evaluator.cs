@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Optimization.CartesianGeneticProgramming;
 using Optimization.Data;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
@@ -41,7 +40,6 @@ namespace Optimization.EvolutionStrategy.Evaluators
         {
             LoaderEvaluationCompleted?.Invoke(this, e);
         }
-
 
         public class EvaluationEventArgs : EventArgs
         {
@@ -89,7 +87,6 @@ namespace Optimization.EvolutionStrategy.Evaluators
             IndividualsEvaluated += 1;
             EvaluateLoader(new List<IIndividual>(){ individual}, TrainDataLoader);
         }
-
 
         protected virtual void EvaluateLoader(List<IIndividual> individuals, DataLoader<TData> loader)
         {

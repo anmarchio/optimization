@@ -13,7 +13,7 @@ using Optimization.EvolutionStrategy.Random;
 using Optimization.EvolutionStrategy.Selectors;
 using Optimization.EvolutionStrategy.Terminators;
 using Optimization.Fitness;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.CVPipeline
 {

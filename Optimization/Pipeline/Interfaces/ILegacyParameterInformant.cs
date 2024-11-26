@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Optimization.Pipeline.Interfaces
+namespace Optimization.HalconPipeline.Interfaces
 {
     public interface ILegacyParameterInformant<TIn, TParam, TOut> : IParameterInformant
     {

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using HalconDotNet;
-using Optimization.Pipeline;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline;
+using Optimization.HalconPipeline.Interfaces;
 
 namespace Optimization.HPipeline
 {

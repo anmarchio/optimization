@@ -1,6 +1,7 @@
 ﻿using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.EvolutionStrategy.Selectors;
 using Optimization.Fitness;
+using System.Collections.Generic;
 
 namespace Optimization.EvolutionStrategy
 {
@@ -42,7 +43,7 @@ namespace Optimization.EvolutionStrategy
             FitnessConfiguration = fitnessConfiguration;
         }
 
-        public IIndividual Run()
+        public List<IIndividual> Run()
         {
             return Evolve();
         }

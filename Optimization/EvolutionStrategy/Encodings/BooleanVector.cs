@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
-using Serilog;
 
 namespace Optimization.EvolutionStrategy.Encodings
 {
@@ -127,5 +124,7 @@ namespace Optimization.EvolutionStrategy.Encodings
                 return vector;
             }          
         }
+
+    
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 using Optimization.Serialization.Interfaces;
 
 namespace Optimization.CartesianGeneticProgramming.Interfaces

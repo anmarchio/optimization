@@ -1,7 +1,7 @@
 ﻿using System;
 using Optimization.CartesianGeneticProgramming.Interfaces;
 
-namespace Optimization.Pipeline.Interfaces
+namespace Optimization.HalconPipeline.Interfaces
 {
     public interface IOperatorEncoder
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     [Serializable]
     public class DependencyNode : Node, IOutputNode<object>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Optimization.Pipeline
+namespace Optimization.HalconPipeline
 {
     [Flags]
     public enum OperatorType : short  // formerly: Filter, Threshold, Morphological

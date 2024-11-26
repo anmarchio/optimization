@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Emgu.CV;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.CVPipeline.OperatorNodes
 {

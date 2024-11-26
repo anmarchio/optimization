@@ -10,7 +10,7 @@ using Optimization.EvolutionStrategy.Evaluators;
 using Optimization.EvolutionStrategy.Interfaces;
 using Optimization.Fitness;
 using Optimization.Fitness.Interfaces;
-using Optimization.Pipeline.Interfaces;
+using Optimization.HalconPipeline.Interfaces;
 using Serilog;
 
 namespace Optimization.CVPipeline.CVCGP

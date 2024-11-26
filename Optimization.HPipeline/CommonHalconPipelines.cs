@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
 using Optimization.HPipeline.OperatorNodes;
-using Optimization.Pipeline;
+using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline
 {
