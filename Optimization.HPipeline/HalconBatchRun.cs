@@ -133,9 +133,11 @@ namespace Optimization.HPipeline
             }
         }
 
-        // ==================>
-        // ========> TEST THIS
-        // ==================>
+        /// <summary>
+        /// Log the best pipelines for each generation as dot
+        /// and save as txt to grid/[run_id]/pipelines/
+        /// </summary>
+        /// <param name="loggable"></param>
         public static void LogHalconBestPipelinesByIteration(LoggingObject loggable)
         {
             Console.WriteLine("LogHalconBestPipelinesByIteration ...");
