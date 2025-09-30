@@ -62,6 +62,12 @@ namespace Optimization.Commandline
 
             [Option("evo-type", Required = false,
                 HelpText = "The evolution strategy type. Currently supports standard and selfadaptive", Default = EvolutionStrategyType.standard)]
+            public string SelectedDepTree { get; set; }
+
+            [Option("deptree", Required = false, Default = "simple",
+                HelpText = "Dependency tree which is actually a graph. Options: [simple, unlimited, multiple]")]
+            
+
             public EvolutionStrategyType EvolutionStrategyType { get; set; }
 
             [Option("seed", Required = false,
@@ -966,6 +972,11 @@ namespace Optimization.Commandline
             ModularOperatorMap map = null;
             List<INode> nodes = null;
             DependencyTree tree = null;
+
+            if(o.SelectedDepTree == "unlimited")
+                tree = DependencyTree.GetUnlimitedDependencies();
+            else // if (o.SelectedDepTree == "simple")
+                tree = DependencyTree.GetSimpleDependencies();
 
             if (o.Operators != null) // if --operators= was passed
             {

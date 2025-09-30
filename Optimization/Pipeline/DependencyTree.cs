@@ -62,6 +62,7 @@ namespace Optimization.HalconPipeline
                 return new List<DependencyTree>()
                 {
                     GetSimpleDependencies(),
+                    GetUnlimitedDependencies(),
                     MultipleImagesInput(),
                 };
             }
@@ -143,13 +144,86 @@ namespace Optimization.HalconPipeline
             return p;
         }
 
+        /// <summary>
+        /// Dependency graphs with no limitiations, allows all possible combinations.
+        /// </summary>
+        /// <returns></returns>
+        public static DependencyTree GetUnlimitedDependencies()
+        {
+            /*
+             * This dependency graph provides maximum freedom,
+             * but keeps a layered DAG structure to avoid cycles.
+             */
+
+            var r2r_first = new DependencyNode(OperatorType.RegionToRegion);
+            var r2r_end = new DependencyNode(OperatorType.RegionToRegion);
+            // for potentially invalid combinations
+            // r2r_center -> img2r -> img2img
+            // r2r_center -> img2img
+            var r2r_center = new DependencyNode(OperatorType.RegionToRegion);
+            var imgAr2r = new DependencyNode(OperatorType.ImageAndRegionToRegion);
+            var edgeAr2r = new DependencyNode(OperatorType.EdgeAmpAndRegionToRegion);
+            var img2r = new DependencyNode(OperatorType.ImageToRegion);
+            var img2img = new DependencyNode(OperatorType.ImageToImage);
+            var edge = new DependencyNode(OperatorType.EdgeAmplitude);
+            var imageInput = new DependencyInputNode(-1); // for standard case with only one input image
+
+            r2r_end.AddChild(img2r);
+            r2r_end.AddChild(imgAr2r);
+            //r2r_end.AddChild(r2r_first);
+
+            r2r_first.AddChild(img2r);
+
+            edge.AddChild(img2img);
+
+            //Maybe modify in such a way, that it allows graphs without all OperatorTypes
+            // -> No exception for missing operatortypes in parameters for definied operatormap
+
+            imgAr2r.AddAndDependencies(new List<DependencyNode> { r2r_first, img2r },
+                                        new List<DependencyNode>() { img2img });
+
+            edgeAr2r.AddAndDependencies(new List<DependencyNode> { edge },
+                           new List<DependencyNode> { r2r_first, img2r });
+
+            img2r.AddChild(img2img);
+            img2r.AddChild(edge);
+            r2r_end.AddChild(edgeAr2r);
+            r2r_end.AddChild(r2r_first);
+
+            img2r.AddChild(imageInput);
+            img2img.AddChild(imageInput);
+            //img2img.AddChild(img2img);
+            edge.AddChild(imageInput);
+
+            // The following extensions will definitely not work,
+            // but has to be added for "free" combinations
+            // that also can lead to failing pipelines
+            r2r_first.AddChild(imageInput);
+            r2r_end.AddChild(imageInput);
+            //img2img -> r2r -> input
+            img2img.AddChild(r2r_center);
+            r2r_center.AddChild(imageInput);
+            //img2r -> r2r -> input
+            img2r.AddChild(r2r_center);
+            //edge -> r2r -> input
+            // edge -> input
+            edge.AddChild(r2r_center);
+            // edgeamp -> input
+            // edgeamp -> r2r
+            edgeAr2r.AddChild(r2r_center);
+
+            var p = new DependencyTree(//new List<DependencyNode>() { imageInput }, // input nodes
+                                         r2r_end, img2r, img2img, edge, edgeAr2r); // output nodes
+            return p;
+        }
+
         public static DependencyTree RegionsOnly()
         {
             var r2r = new DependencyNode(OperatorType.RegionToRegion);
             var regionInput = new DependencyInputNode(-1);
             r2r.AddChild(regionInput);
 
-            var p = new DependencyTree(/*new List<DependencyNode>() { regionInput }, new List<DependencyNode>() {*/ r2r );
+            var p = new DependencyTree(regionInput, r2r );
             return p;
         }
 

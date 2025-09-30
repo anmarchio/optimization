@@ -106,6 +106,11 @@ namespace Optimization.Fitness.OperatorMaps
         public List<Node> Operators { get; set; }
 
         public DependencyTree Dependencies { get; set; } = DependencyTree.GetSimpleDependencies();
+        /*
+            17/09/2025
+            Benchmark experimentation with loosened dependencies to test against classic CGP-IP
+            //public DependencyTree Dependencies { get; set; } = DependencyTree.GetUnlimitedDependencies();
+        */
 
         protected HashSet<float> InputOperators { get; set; } = null;
 
