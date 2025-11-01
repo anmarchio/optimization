@@ -102,7 +102,21 @@ namespace Optimization.HPipeline.OperatorNodes
 
         public override List<string> HalconFunctionCall()
         {
-            throw new NotImplementedException();
+            List<string> lines = new List<string>();
+
+            lines.Add($"        * AreaToRectangle");
+            lines.Add($"        area_center(Region, Area, Row, Column)");
+            lines.Add($"        Num:= | Area |");
+            lines.Add($"        gen_empty_region(Rectangles)");
+            lines.Add($"        for Index1 := 1 to Num by 1");
+            lines.Add($"            select_obj(Region, obj, Index1)");
+            lines.Add($"            smallest_rectangle1(obj, Row11, Column11, Row21, Column21)");
+            lines.Add($"            gen_rectangle1(Rectangle, Row11, Column11, Row21, Column21)");
+            lines.Add($"            union2(Rectangles, Rectangle, Rectangles)");
+            lines.Add($"        endfor        ");
+            lines.Add($"        Region := Rectangles");
+
+            return lines;
         }
     }
 }

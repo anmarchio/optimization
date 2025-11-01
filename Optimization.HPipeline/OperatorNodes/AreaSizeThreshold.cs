@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using HalconDotNet;
 using Optimization.HPipeline.Fitness.OperatorMaps;
 using Optimization.HalconPipeline;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Emit;
 
 namespace Optimization.HPipeline.OperatorNodes
 {
@@ -149,7 +154,66 @@ namespace Optimization.HPipeline.OperatorNodes
 
         public override List<string> HalconFunctionCall()
         {
-            throw new NotImplementedException();
+
+            List<string> lines = new List<string>();            
+
+            lines.Add($"MinGray:= {MinGray.ToString()}");
+            lines.Add($"MaxGray:= {MaxGray.ToString()}");
+            lines.Add($"*AreaSizeThreshold");
+            lines.Add($"abs_image({Children.First().OutputVariableName}, Image)");
+            lines.Add($"");
+            lines.Add($"gen_empty_region(FaultyRegion)");
+            lines.Add($"gen_empty_region(TempRegion)");
+            lines.Add($"");
+            lines.Add($"get_image_size({Children.First().OutputVariableName}, Width, Height)");
+            lines.Add($"");
+            lines.Add($"I_W:= Width / {WindowWidth.ToString()}");
+            lines.Add($"I_H:= Height / {WindowHeight.ToString()}");
+            lines.Add($"");
+            lines.Add($"for i := 0 to I_W by 1");
+            lines.Add($"for j := 0 to I_H by 1");
+            lines.Add($"Row1 := j * {WindowHeight.ToString()}");
+            lines.Add($"Col1 := i * {WindowHeight.ToString()}");
+            lines.Add($"Row2 := j * {WindowHeight.ToString()} + {WindowHeight.ToString()}");
+            lines.Add($"Col2 := i * {WindowHeight.ToString()} + {WindowHeight.ToString()}");
+            lines.Add($"");
+            lines.Add($"if (Row2 > Height)");
+            lines.Add($"Row2:= Height");
+            lines.Add($"endif");
+            lines.Add($"");
+            lines.Add($"if (Col2 > Width)");
+            lines.Add($"Col2:= Width");
+            lines.Add($"endif");
+            lines.Add($"");
+            lines.Add($"if (Row1 > Height)");
+            lines.Add($"Row1:= Height - 1");
+            lines.Add($"endif");
+            lines.Add($"");
+            lines.Add($"if (Col1 > Width)");
+            lines.Add($"Col1:= Width - 1");
+            lines.Add($"endif");
+            lines.Add($"");
+            lines.Add($"crop_rectangle1({Children.First().OutputVariableName}, ImagePart, Row1, Col1, Row2, Col2)");
+            lines.Add($"threshold(ImagePart, Threads, 40, 255)");
+            lines.Add($"area_center(Threads, AreaSize, Row, Col)");
+            lines.Add($"");
+            lines.Add($"if (AreaSize < {MaxSize.ToString()} and AreaSize > {MinSize.ToString()})");
+            lines.Add($"gen_rectangle1(TempRegion, Row1, Col1, Row2, Col2)");
+            lines.Add($"union2(TempRegion, FaultyRegion, FaultyRegion)");
+            lines.Add($"endif");
+            lines.Add($"");
+            lines.Add($"smallest_rectangle1(FaultyRegion, Row1, Col1, Row2, Col2)");
+            lines.Add($"region_features(FaultyRegion, 'area', Value)");
+            lines.Add($"endfor");
+            lines.Add($"endfor");
+            lines.Add($"");
+            lines.Add($"count_obj(FaultyRegion, Number)");
+            lines.Add($"if (Number > 0)");
+            lines.Add($"Region:= FaultyRegion");
+            lines.Add($"else");
+            lines.Add($"gen_empty_region(Region)");
+            lines.Add($"endif");
+            return lines;
         }
     }
 }
