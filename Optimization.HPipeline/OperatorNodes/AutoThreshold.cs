@@ -91,20 +91,20 @@ namespace Optimization.HPipeline.OperatorNodes
             lines.AddRange(absText);
 
             string imageTypeOutput = "Img_type";
-            string typeText = HObjectExtensions.ImageTypeHalconText(OutputVariableName, imageTypeOutput);
+            string typeText = HObjectExtensions.ImageTypeHalconText(Children.First().OutputVariableName, imageTypeOutput);
 
             lines.Add(typeText);
             lines.Add($"if (( {imageTypeOutput} # 'byte') and ({imageTypeOutput} # 'uint2') and ({imageTypeOutput} # 'real') )");
 
             string convOutput = "Conv_out";
-            var convText = HObjectExtensions.ConvertStandardHalconText(OutputVariableName, convOutput);
+            var convText = HObjectExtensions.ConvertStandardHalconText(Children.First().OutputVariableName, convOutput);
             lines.AddRange(convText);
 
             lines.Add(string.Format("auto_threshold ({0}, {1}, {2})", convOutput, OutputVariableName, Sigma.ToInvariantString()));
 
             lines.Add($"else");
 
-            lines.Add(string.Format("auto_threshold ({0}, {1}, {2})", OutputVariableName, OutputVariableName, Sigma.ToInvariantString()));
+            lines.Add(string.Format("auto_threshold ({0}, {1}, {2})", Children.First().OutputVariableName, OutputVariableName, Sigma.ToInvariantString()));
 
             lines.Add($"endif");
 

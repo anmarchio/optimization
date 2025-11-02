@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HalconDotNet;
 using Optimization.HPipeline.Fitness.OperatorMaps;
 using Optimization.HalconPipeline;
+using System.Linq;
 
 namespace Optimization.HPipeline.OperatorNodes
 {
@@ -133,7 +134,7 @@ namespace Optimization.HPipeline.OperatorNodes
 
         public override List<string> HalconFunctionCall()
         {
-            throw new NotImplementedException();
+            return HObjectExtensions.RelativeThresholdHalconText(Children.First().OutputVariableName, OutputVariableName);
         }
     }
 }

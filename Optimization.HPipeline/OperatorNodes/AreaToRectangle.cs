@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HalconDotNet;
 using Optimization.HPipeline.Fitness.OperatorMaps;
 using Optimization.HalconPipeline;
+using System.Linq;
 
 namespace Optimization.HPipeline.OperatorNodes
 {
@@ -105,7 +106,7 @@ namespace Optimization.HPipeline.OperatorNodes
             List<string> lines = new List<string>();
 
             lines.Add($"        * AreaToRectangle");
-            lines.Add($"        area_center(Region, Area, Row, Column)");
+            lines.Add($"        area_center({Children.First().OutputVariableName}, Area, Row, Column)");
             lines.Add($"        Num:= | Area |");
             lines.Add($"        gen_empty_region(Rectangles)");
             lines.Add($"        for Index1 := 1 to Num by 1");
@@ -114,7 +115,7 @@ namespace Optimization.HPipeline.OperatorNodes
             lines.Add($"            gen_rectangle1(Rectangle, Row11, Column11, Row21, Column21)");
             lines.Add($"            union2(Rectangles, Rectangle, Rectangles)");
             lines.Add($"        endfor        ");
-            lines.Add($"        Region := Rectangles");
+            lines.Add($"        {OutputVariableName} := Rectangles");
 
             return lines;
         }

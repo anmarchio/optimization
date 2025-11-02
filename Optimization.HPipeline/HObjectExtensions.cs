@@ -367,6 +367,66 @@ HOperatorSet.ZoomImageSize(tmp, out output, width, height, interpolation: "neare
             return lines;
         }
 
+        public static List<string> RelativeThresholdHalconText(string imageName, string outVariable)
+        {
+            List<string> lines = new List<string>();
+
+            lines.Add("* CropSmallestRectangle");
+            lines.Add("tuple_real(MinRatio, MinRatio)");
+            lines.Add($"gen_empty_region(Region2)");
+            lines.Add($"count_channels({imageName}, NumChannels)");
+            lines.Add($"if(NumChannels > 1)");
+            lines.Add($"    access_channel({imageName}, Image2, 1)");
+            lines.Add("endif");
+            lines.Add($"get_image_type({imageName}, Type)");
+            lines.Add("if(Type != 'byte' and Type != 'uint2' and Type != 'direction' and Type != 'cyclic' and Type != 'real')");
+            lines.Add("    convert_image_type(Image2, Image2, 'byte')");
+            lines.Add("endif");
+            lines.Add($"fast_threshold({imageName}, Region2, 45, 255, 80)");
+            lines.Add("fill_up(Region2, Rectangle)");
+            lines.Add("gen_empty_obj(FaultyRegion)");
+            lines.Add("gen_empty_obj(NewImgReduced)");
+            lines.Add("gen_empty_obj(ImgPart)");
+            lines.Add($"gen_empty_obj({outVariable})");
+            lines.Add("smallest_rectangle1(Rectangle, Row1, Col1, Row2, Col2)");
+            lines.Add("reduce_domain(Image2, Rectangle, NewImageReduced)");
+            lines.Add("region_features(Rectangle, 'width', RegWidth)");
+            lines.Add("region_features(Rectangle, 'height', RegHeight)");
+            lines.Add("WStep := RegWidth / MaskWidth");
+            lines.Add("HStep := RegHeight / MaskHeight");
+            lines.Add("EndW := (Col2 - (WStep / 1.5)) - 20");
+            lines.Add("StepW := WStep / 2");
+            lines.Add("for ImgWidth := Col1 + 20 to EndW by StepW");
+            lines.Add("    EndH := Row2 - (HStep / 1.5)");
+            lines.Add("    StepH := HStep / 2");
+            lines.Add("    if(StepW == 0.0)");
+            lines.Add("        break");
+            lines.Add("    endif");
+            lines.Add("    for ImgHeight := Row1 + 3 to EndH by StepH");
+            lines.Add("        if(StepH == 0.0)");
+            lines.Add("            break");
+            lines.Add("        endif");
+            lines.Add("        gen_empty_obj(ImagePart)");
+            lines.Add("        crop_rectangle1(NewImageReduced, ImgPart, ImgHeight, ImgWidth, ImgHeight + HStep, ImgWidth + WStep)");
+            lines.Add("        gray_histo_range(ImgPart, ImgPart, 0, 255, 2, Histo, BinSize)");
+            lines.Add("        PixelCount := Histo[0] + Histo[1]");
+            lines.Add("        tuple_real(PixelCount, PixelCount)");
+            lines.Add("        if(PixelCount <= 0.6 * WStep * HStep)");
+            lines.Add("            continue");
+            lines.Add("        endif");
+            lines.Add("        Ratio := (Histo[1] * 1.0) / (PixelCount * 1.0)");
+            lines.Add("        if(Ratio < MinRatio)");
+            lines.Add("            gen_rectangle1(FaultyRegion, ImgHeight, ImgWidth, ImgHeight + HStep, ImgWidth + WStep)");
+            lines.Add($"            concat_obj(FaultyRegion, {outVariable}, FaultyRegion)");
+            lines.Add($"            union1(FaultyRegion, {outVariable})");
+            lines.Add("        endif");
+            lines.Add("    endfor");
+            lines.Add("endfor");
+
+            return lines;
+        }
+
+
         public static bool IsNullOrEmpty(this HObject obj)
         {
             if (obj == null) return true;

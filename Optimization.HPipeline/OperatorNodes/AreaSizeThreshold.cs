@@ -209,9 +209,9 @@ namespace Optimization.HPipeline.OperatorNodes
             lines.Add($"");
             lines.Add($"count_obj(FaultyRegion, Number)");
             lines.Add($"if (Number > 0)");
-            lines.Add($"Region:= FaultyRegion");
+            lines.Add($"{OutputVariableName}:= FaultyRegion");
             lines.Add($"else");
-            lines.Add($"gen_empty_region(Region)");
+            lines.Add($"gen_empty_region({OutputVariableName})");
             lines.Add($"endif");
             return lines;
         }

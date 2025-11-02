@@ -1,9 +1,9 @@
-﻿using System;
+﻿using HalconDotNet;
+using Optimization.HalconPipeline;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using HalconDotNet;
-using Optimization.HalconPipeline;
 
 namespace Optimization.HPipeline.OperatorNodes
 {
@@ -142,19 +142,32 @@ namespace Optimization.HPipeline.OperatorNodes
         /// Generates halcon Code by exporting Execute functionality
         /// this specific Operator has 2 or more Input nodes. Leen suggested leaving this implementation empty for now
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of strings that represent code to be executed as .hdev file</returns>
         public override List<string> HalconFunctionCall()
         {
-            /*
             List<string> lines = new List<string>();
+            
+            string imageTypeOutput = "Img_type";
+            string typeText = HObjectExtensions.ImageTypeHalconText(OutputVariableName, imageTypeOutput);
+
+            lines.Add(typeText);
+            lines.Add($"if (( {imageTypeOutput} # 'byte') and ({imageTypeOutput} # 'uint2') and ({imageTypeOutput} # 'int4') )");
+
+            string convOutput = "Conv_out";
+            var convText = HObjectExtensions.ConvertStandardHalconText(OutputVariableName, convOutput);
+            lines.AddRange(convText);
 
             lines.Add(String.Format("close_edges ({0}, {1}, {2}, {3})",
-                Children.First().OutputVariableName, , OutputVariableName, MinAmplitude.ToString()));
+                Children.First().OutputVariableName, OutputVariableName, MinAmplitude.ToString()));
 
+            lines.Add($"else");
+
+            lines.Add(String.Format("close_edges ({0}, {1}, {2}, {3})",
+                Children.First().OutputVariableName, OutputVariableName, MinAmplitude.ToString()));
+
+            lines.Add($"endif");
+            
             return lines;
-            */
-
-            throw new NotImplementedException();
         }
     }
 }

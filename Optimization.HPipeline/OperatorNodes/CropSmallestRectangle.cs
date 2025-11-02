@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HalconDotNet;
 using Optimization.HalconPipeline;
 
@@ -121,20 +122,19 @@ namespace Optimization.HPipeline.OperatorNodes
         /// Generates halcon Code by exporting Execute functionality
         /// this specific Operator has 2 or more Input nodes. Leen suggested leaving this implementation empty for now
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of strings that represent code to be executed as .hdev file</returns>
         public override List<string> HalconFunctionCall()
-        {
-            /*
+        {            
             List<string> lines = new List<string>();
 
-            lines.Add(String.Format("threshold ()", ));
-            lines.Add(String.Format("smallest_rectangle1 ()", ));
-            lines.Add(String.Format("crop_rectangle1 ()", ));
+            lines.Add(String.Format("threshold ({0}, {1}, {2}, {3})",
+                Children.First().OutputVariableName, OutputVariableName, MinGray.ToString(), MaxGray.ToString()));
+            lines.Add(String.Format("smallest_rectangle1 ({0}, Row1, Column1, Row2, Column2)",
+                OutputVariableName));
+            lines.Add(String.Format("crop_rectangle1 ({0}, {1}, Row1, Column1, Row2, Column2)", 
+                Children.First().OutputVariableName, OutputVariableName));
 
             return lines;
-            */
-
-            throw new NotImplementedException();
         }
     }
 }
