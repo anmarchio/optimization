@@ -92,7 +92,7 @@ namespace Optimization.HPipeline.OperatorNodes
         /// Author: braml
         /// Function to convert FunctionCall to halcon code for export into a hdev file
         /// </summary>
-        /// <returns> List of strings that represent code to be executed as .hdev file</returns>
+        /// <returns>List of strings that represent code to be executed as .hdev file</returns>
         public override List<string> HalconFunctionCall()
         {
             List<string> lines = new List<string>();

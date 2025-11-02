@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using HalconDotNet;
 using Optimization.HalconPipeline;
@@ -74,12 +75,31 @@ namespace Optimization.HPipeline.OperatorNodes
         /// <summary>
         /// Author:braml
         /// Generates halcon Code by exporting Execute functionality
-        /// this specific Operator has 2 or more Input nodes. Leen suggested leaving this implementation empty for now
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of strings that represent code to be executed as .hdev file</returns>
         public override List<string> HalconFunctionCall()
         {
-            throw new NotImplementedException();
+            List<string> lines = new List<string>();
+
+            lines.Add(GatherThresholdImageHalconText());
+            
+            lines.Add($"dyn_threshold (OrigImage," +
+                $"{Children.First().OutputVariableName}, {OutputVariableName}, " +
+                $"{Offset.ToString()}, {LightDark.ToString()})");
+
+            return lines;
+        }
+        private string GatherThresholdImageHalconText()
+        {
+            string threshImageString = "copy_image(Image, OrigImage)";
+
+            var thresh = Children.FirstOrDefault(x => x.IsOrOperatorType(OperatorType.ImageToImage));
+
+            if (thresh == null)
+                threshImageString = "throw(['DynThreshold expects one child of type OperatorType.ImageToImage that is not also a Threshold'])";
+            
+
+            return threshImageString;
         }
 
         private HObject GatherThresholdImage()
