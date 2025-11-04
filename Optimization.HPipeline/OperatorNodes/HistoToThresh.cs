@@ -43,7 +43,31 @@ namespace Optimization.HPipeline.OperatorNodes
 
         public override List<string> HalconFunctionCall()
         {
-            throw new NotImplementedException();
+
+            List<string> lines = new List<string>();
+
+            string imageTypeOutput = "Img_type";
+            string typeText = HObjectExtensions.ImageTypeHalconText(OutputVariableName, imageTypeOutput);
+
+            lines.Add(typeText);
+            lines.Add($"if (( {imageTypeOutput} # 'byte') and ({imageTypeOutput} # 'uint2') and ({imageTypeOutput} # 'int4') )");
+
+            string convOutput = "Conv_out";
+            var convText = HObjectExtensions.ConvertStandardHalconText(OutputVariableName, convOutput);
+            lines.AddRange(convText);
+
+            lines.Add($"union1({OutputVariableName}, RegionUnion)");
+            lines.Add($"gray_histo(RegionUnion, Image, AbsoluteHisto, RelativeHisto)");
+
+            lines.Add($"if(|AbsoluteHisto| <= 0)");
+            lines.Add($"{OutputVariableName} := RegionUnion");
+            lines.Add($"endif");
+
+            lines.Add($"histo_to_thresh(AbsoluteHisto, {Sigma}, MinThresh, MaxThresh)");
+
+            lines.Add($"threshold(Image, {OutputVariableName}, MinThresh, MaxThresh)");
+            
+            return lines;
         }
 
 
