@@ -60,13 +60,13 @@ namespace Optimization.Commandline
                 HelpText = "The output directory. Defaults to working directory/results<timestamp>")]
             public string ResultDirectory { get; set; }
 
-            [Option("evo-type", Required = false,
-                HelpText = "The evolution strategy type. Currently supports standard and selfadaptive", Default = EvolutionStrategyType.standard)]
-            public string SelectedDepTree { get; set; }
-
             [Option("deptree", Required = false, Default = "simple",
                 HelpText = "Dependency tree which is actually a graph. Options: [simple, unlimited, multiple]")]
-            
+
+            public string SelectedDepTree { get; set; }
+
+            [Option("evo-type", Required = false,
+                HelpText = "The evolution strategy type. Currently supports standard and selfadaptive", Default = EvolutionStrategyType.standard)]
 
             public EvolutionStrategyType EvolutionStrategyType { get; set; }
 
